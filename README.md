@@ -1,24 +1,11 @@
-# Project Name
+# Macro Flask Classifier
 
-![Team Photo](Insert a Team Photo URL here)
-[*how?*](https://help.github.com/articles/about-readmes/#relative-links-and-image-paths-in-readme-files)
-
-TODO: short project description, some sample screenshots or mockups
-
-## Architecture
-
-TODO:  descriptions of code organization and tools and libraries used
-
-## Setup
-
-TODO: how to get the project dev environment up and running, npm install etc
-
-## Deployment
-
-TODO: how to deploy the project
+This repo hosts a Flask server to run food classification processes to send to the api.
 
 ## Authors
 
-TODO: list of authors
+Anand Mittal
 
 ## Acknowledgments
+
+https://www.youtube.com/watch?v=Z1RJmh_OqeA&ab_channel=freeCodeCamp.org
