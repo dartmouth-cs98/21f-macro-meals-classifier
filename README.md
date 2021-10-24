@@ -12,7 +12,7 @@ TODO: how to get the project dev environment up and running, npm install etc, al
 
 ## Deployment
 
-TODO: how to deploy the project
+This project is deployed to heroku. Navigate to https://macroclassifier.herokuapp.com/ to get to the web server.
 
 ## Authors
 
