@@ -16,12 +16,12 @@ def getShapeFeatures(img):
 	for i in hu:
 		feature.append(i[0])	
 	M = max(feature)
-  m = min(feature)
+  	m = min(feature)
 	feature = map(lambda x: x * 2, feature)
-  feature = (feature - M - m)/(M - m)
-  mean=np.mean(feature)
-  dev=np.std(feature)
-  feature = (feature - mean)/dev
+ 	feature = (feature - M - m)/(M - m)
+	mean=np.mean(feature)
+  	dev=np.std(feature)
+ 	feature = (feature - mean)/dev
 	return feature
 
 if __name__ == '__main__':
@@ -30,6 +30,6 @@ if __name__ == '__main__':
 	mask = cv2.inRange(img, 80, 255)
 	img1 = cv2.bitwise_and(img, img, mask = mask)
 	h = getShapeFeatures(img1)
-	print h
+	#print h
 	cv2.waitKey()
 	cv2.destroyAllWindows()
