@@ -12,10 +12,10 @@ def build_filters():
     filters = []
     ksize = 31
     for theta in np.arange(0, np.pi, np.pi / 8):
-	    for wav in [ 8.0, 13.0]:
-		    for ar in [0.8, 2.0]:
-        		kern = cv2.getGaborKernel((ksize, ksize), 5.0, theta, wav, ar, 0, ktype=cv2.CV_32F)
-	            filters.append(kern)
+        for wav in [ 8.0, 13.0]:
+            for ar in [0.8, 2.0]:
+                kern = cv2.getGaborKernel((ksize, ksize), 5.0, theta, wav, ar, 0, ktype=cv2.CV_32F)
+                filters.append(kern)
     cv2.imshow('filt', filters[9])
     return filters
 	
