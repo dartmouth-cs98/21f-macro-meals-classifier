@@ -40,11 +40,11 @@ def process(img, filters):
     feature = []
     accum = np.zeros_like(img)
     for kern in filters:
-    	fimg = cv2.filter2D(img, cv2.CV_8UC3, kern)  
+        fimg = cv2.filter2D(img, cv2.CV_8UC3, kern)  
         a, b = EnergySum(fimg)
         feature.append(a)
         feature.append(b)
-    	np.maximum(accum, fimg, accum)
+        np.maximum(accum, fimg, accum)
     
     M = max(feature)
     m = min(feature)
