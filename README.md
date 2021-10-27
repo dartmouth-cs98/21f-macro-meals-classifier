@@ -8,16 +8,18 @@ App.py hosts uses flask to create a webserver to communicate with the api and ru
 
 ## Setup
 
-TODO: how to get the project dev environment up and running, npm install etc, all necessary commands needed, environment variables etc
+All files within this repo can be tested locally by running them with Python. For example, `python3 learn.py [learn|test] [src]`
 
 ## Deployment
 
-TODO: how to deploy the project
+The project is automatically deployed to Heroku and can be found [here](https://macroclassifier.herokuapp.com/)
 
 ## Authors
 
 Anand Mittal, Brandon Feng, Quinn Spraut, Alex Wong
 
 ## Acknowledgments
+
+A large majority of the OpenCV source code was adapted from [this project](https://github.com/meghanamreddy/Calorie-estimation-from-food-images-OpenCV)
 
 https://www.youtube.com/watch?v=Z1RJmh_OqeA&ab_channel=freeCodeCamp.org
