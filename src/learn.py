@@ -48,14 +48,17 @@ def testing():
 		for i in range(21,26):
 			img_path = "../Dataset/images/Test_Images/"+str(j)+"_"+str(i)+".jpg"
 			print (img_path)
-			fea, farea, skinarea, fcont, pix_to_cm = readFeatureImg(img_path)
-			pix_cm.append(pix_to_cm)
-			fruit_contours.append(fcont)
-			fruit_areas.append(farea)
-			feature_mat.append(fea)
-			skin_areas.append(skinarea)
-			response.append([float(j)])
-			image_names.append(img_path)
+			try:
+				fea, farea, skinarea, fcont, pix_to_cm = readFeatureImg(img_path)
+				pix_cm.append(pix_to_cm)
+				fruit_contours.append(fcont)
+				fruit_areas.append(farea)
+				feature_mat.append(fea)
+				skin_areas.append(skinarea)
+				response.append([float(j)])
+				image_names.append(img_path)
+			except IndexError:
+				print("Ignoring file:")	
 
 	testData = np.float32(feature_mat).reshape(-1,94)
 	responses = np.float32(response)
