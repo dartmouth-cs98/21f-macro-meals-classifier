@@ -54,7 +54,7 @@ def getAreaOfFood(img1):
 	fruit_contour = largest_areas[-2]
 	fruit_area = cv2.contourArea(fruit_contour)
 
-	
+
 	#finding the area of skin. find area of biggest contour
 	skin2 = skin - mask_fruit2
 	#erode before finding contours
@@ -64,9 +64,12 @@ def getAreaOfFood(img1):
 	contours, hierarchy = cv2.findContours(img_th, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
 	mask_skin = np.zeros(skin.shape, np.uint8)
 	largest_areas = sorted(contours, key=cv2.contourArea)
-	print(largest_areas)
-	print(len(largest_areas))
+
+	# try:
 	cv2.drawContours(mask_skin, [largest_areas[-2]], 0, (255,255,255), -1)
+	# except IndexError:
+	# 	print("debug: no contours found")
+	# 	return False
 
 	skin_rect = cv2.minAreaRect(largest_areas[-2])
 	box = cv2.boxPoints(skin_rect)

@@ -12,19 +12,23 @@ svm_params = dict( kernel_type = cv2.ml.SVM_LINEAR, svm_type = cv2.ml.SVM_C_SVC,
 def training():
 	feature_mat = []
 	response = []
-	for j in [5,6,7,8,9,10,11,12,13,14]:
+	for j in [1,2,3,4,5,6,7,8,9,10,11,12,13,14]:
 		for i in range(1,21):
 			print ("../Dataset/images/All_Images/"+str(j)+"_"+str(i)+".jpg")
-			fea, farea, skinarea, fcont, pix_to_cm = readFeatureImg("../Dataset/images/All_Images/"+str(j)+"_"+str(i)+".jpg")
-			feature_mat.append(fea)
-			response.append(float(j))
+			try:
+				fea, farea, skinarea, fcont, pix_to_cm = readFeatureImg("../Dataset/images/All_Images/"+str(j)+"_"+str(i)+".jpg")
+				feature_mat.append(fea)
+				response.append(float(j))
+			# sometimes contours not found; need to figure out how to deal if happens w user image
+			except IndexError:
+				print("Ignoring file:")
 
 	trainData = np.float32(feature_mat).reshape(-1,94)
 	responses = np.float32(response)
 
 	svm = cv2.SVM()
 	svm.train(trainData,responses, params=svm_params)
-	svm.save('svm_data.dat')	
+	svm.save('svm_data.dat')
 
 def testing():
 	svm_model = cv2.SVM()
@@ -41,7 +45,7 @@ def testing():
 	skin_areas = []
 	fruit_calories_100grams = []
 	for j in [1,2,3,4,5,6,7,8,9,10,11,12,13,14]:
-		for i in range(21,26):	
+		for i in range(21,26):
 			img_path = "../Dataset/images/Test_Images/"+str(j)+"_"+str(i)+".jpg"
 			print (img_path)
 			fea, farea, skinarea, fcont, pix_to_cm = readFeatureImg(img_path)
@@ -79,15 +83,15 @@ def testing():
 				data = [str(image_names[i]), str(responses[i][0]), str(result[i][0]), str(fruit_volumes[i]), str(fruit_mass[i]), str(fruit_calories[i]), str(fruit_calories_100grams[i])]
 			writer.writerow(data)
 		outfile.close()
-	
+
 	for i in range(0, len(mask)):
-		if mask[i][0] == False:	
+		if mask[i][0] == False:
 			print ("(Actual Reponse)", responses[i][0], "(Output)", result[i][0], image_names[i])
 
 	correct = np.count_nonzero(mask)
 	print (correct*100.0/result.size)
 
-	
+
 
 if __name__ == '__main__':
 	training()
