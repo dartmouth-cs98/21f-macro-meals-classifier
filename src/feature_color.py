@@ -23,12 +23,12 @@ def getColorFeature(img):
 				featurevec.append(hist[i][j][k])
 	feature = featurevec[1:]	
 	M = max(feature)
-   	m = min(feature)
-    	feature = map(lambda x: x * 2, feature)
-    	feature = (feature - M - m)/(M - m)
-    	mean=np.mean(feature)
-    	dev=np.std(feature)
-    	feature = (feature - mean)/dev
+	m = min(feature)
+	feature = map(lambda x: x * 2, feature)
+	feature = (feature - M - m)/(M - m)
+	mean=np.mean(feature)
+	dev=np.std(feature)
+	feature = (feature - mean)/dev
 
 	return feature
 

@@ -16,12 +16,12 @@ def getShapeFeatures(img):
 	for i in hu:
 		feature.append(i[0])	
 	M = max(feature)
-  	m = min(feature)
+	m = min(feature)
 	feature = map(lambda x: x * 2, feature)
- 	feature = (feature - M - m)/(M - m)
+	feature = (feature - M - m)/(M - m)
 	mean=np.mean(feature)
-  	dev=np.std(feature)
- 	feature = (feature - mean)/dev
+	dev=np.std(feature)
+	feature = (feature - mean)/dev
 	return feature
 
 if __name__ == '__main__':
