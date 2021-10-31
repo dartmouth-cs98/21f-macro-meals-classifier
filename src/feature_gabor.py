@@ -13,7 +13,7 @@ def build_filters():
     ksize = 31
     for theta in np.arange(0, np.pi, np.pi / 8):
         for wav in [ 8.0, 13.0]:
-            for ar in [0.8, 2.0]:
+            for ar in [0.8, 2.0]:                
                 kern = cv2.getGaborKernel((ksize, ksize), 5.0, theta, wav, ar, 0, ktype=cv2.CV_32F)
                 filters.append(kern)
     cv2.imshow('filt', filters[9])
@@ -48,7 +48,7 @@ def process(img, filters):
     
     M = max(feature)
     m = min(feature)
-    feature = map(lambda x: x * 2, feature)
+    feature = list(map(lambda x: x * 2, feature))
     feature = (feature - M - m)/(M - m)
     mean=np.mean(feature)
     dev=np.std(feature)

@@ -12,7 +12,7 @@ svm_params = dict( kernel_type = cv2.ml.SVM_LINEAR, svm_type = cv2.ml.SVM_C_SVC,
 def training():
 	feature_mat = []
 	response = []
-	for j in [1,2,3,4,5,6,7,8,9,10,11,12,13,14]:
+	for j in [5,6,7,8,9,10,11,12,13,14]:
 		for i in range(1,21):
 			print ("../Dataset/images/All_Images/"+str(j)+"_"+str(i)+".jpg")
 			fea, farea, skinarea, fcont, pix_to_cm = readFeatureImg("../Dataset/images/All_Images/"+str(j)+"_"+str(i)+".jpg")

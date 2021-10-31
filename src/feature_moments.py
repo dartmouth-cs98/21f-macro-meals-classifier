@@ -17,7 +17,8 @@ def getShapeFeatures(img):
 		feature.append(i[0])	
 	M = max(feature)
 	m = min(feature)
-	feature = map(lambda x: x * 2, feature)
+
+	feature = list(map(lambda x: x * 2, feature))
 	feature = (feature - M - m)/(M - m)
 	mean=np.mean(feature)
 	dev=np.std(feature)
