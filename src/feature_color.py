@@ -24,6 +24,7 @@ def getColorFeature(img):
 	feature = featurevec[1:]	
 	M = max(feature)
 	m = min(feature)
+	
 	feature = list(map(lambda x: x * 2, feature))
 	feature = (feature - M - m)/(M - m)
 	mean=np.mean(feature)
