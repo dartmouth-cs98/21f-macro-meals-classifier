@@ -5,15 +5,16 @@ import cv2
 from create_feature import *
 from calorie_calc import *
 import csv
+from sklearn import svm
 
-svm_params = dict( kernel_type = cv2.ml.SVM_LINEAR, svm_type = cv2.ml.SVM_C_SVC, C=2.67, gamma=5.383 )
+svm_params = dict(kernel_type = cv2.ml.SVM_LINEAR, svm_type = cv2.ml.SVM_C_SVC, C=2.67, gamma=5.383 )
 
 
 def training():
 	feature_mat = []
 	response = []
 	for j in [1,2,3,4,5,6,7,8,9,10,11,12,13,14]:
-		for i in range(1,21):
+		for i in range(1,2):
 			print ("../Dataset/images/All_Images/"+str(j)+"_"+str(i)+".jpg")
 			try:
 				fea, farea, skinarea, fcont, pix_to_cm = readFeatureImg("../Dataset/images/All_Images/"+str(j)+"_"+str(i)+".jpg")
@@ -26,12 +27,20 @@ def training():
 	trainData = np.float32(feature_mat).reshape(-1,94)
 	responses = np.float32(response)
 
-	svm = cv2.SVM()
-	svm.train(trainData,responses, params=svm_params)
-	svm.save('svm_data.dat')
+	### OLD SVM CODE USING CV2 ###
+	# svm = cv2.ml.SVM_create()
+	# svm.train(trainData,responses, svm_params)
+	# our_svm.save('svm_data.dat')
+
+	train_svm = svm.SVC()
+	train_svm.fit(trainData, responses)
+
+	# need save functionality for svm
+
+
 
 def testing():
-	svm_model = cv2.SVM()
+	svm_model = cv2.ml.SVM_create()
 	svm_model.load('svm_data.dat')
 	feature_mat = []
 	response = []
@@ -58,7 +67,7 @@ def testing():
 				response.append([float(j)])
 				image_names.append(img_path)
 			except IndexError:
-				print("Ignoring file:")	
+				print("Ignoring file:")
 
 	testData = np.float32(feature_mat).reshape(-1,94)
 	responses = np.float32(response)
@@ -98,4 +107,4 @@ def testing():
 
 if __name__ == '__main__':
 	training()
-	testing()
+	# testing()
