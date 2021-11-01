@@ -6,15 +6,16 @@ from create_feature import *
 from calorie_calc import *
 import csv
 from sklearn import svm
+import pickle
 
 svm_params = dict(kernel_type = cv2.ml.SVM_LINEAR, svm_type = cv2.ml.SVM_C_SVC, C=2.67, gamma=5.383 )
-
+filename = 'svm_data.dat'
 
 def training():
 	feature_mat = []
 	response = []
 	for j in [1,2,3,4,5,6,7,8,9,10,11,12,13,14]:
-		for i in range(1,2):
+		for i in range(1,21):
 			print ("../Dataset/images/All_Images/"+str(j)+"_"+str(i)+".jpg")
 			try:
 				fea, farea, skinarea, fcont, pix_to_cm = readFeatureImg("../Dataset/images/All_Images/"+str(j)+"_"+str(i)+".jpg")
@@ -34,14 +35,16 @@ def training():
 
 	train_svm = svm.SVC()
 	train_svm.fit(trainData, responses)
+	pickle.dump(train_svm, open(filename, 'wb'))
 
 	# need save functionality for svm
 
 
 
 def testing():
-	svm_model = cv2.ml.SVM_create()
-	svm_model.load('svm_data.dat')
+	#svm_model = cv2.ml.SVM_create()
+	#svm_model.load('svm_data.dat')
+	svm_model = pickle.load(open(filename, 'rb'))
 	feature_mat = []
 	response = []
 	image_names = []
@@ -71,7 +74,8 @@ def testing():
 
 	testData = np.float32(feature_mat).reshape(-1,94)
 	responses = np.float32(response)
-	result = svm_model.predict_all(testData)
+	#result = svm_model.predict_all(testData)
+	result = svm_model.predict(testData)
 	mask = result==responses
 
 	#calculate calories
@@ -88,23 +92,28 @@ def testing():
 		writer = csv.writer(outfile)
 		data = ["Image name", "Desired response", "Output label", "Volume (cm^3)", "Mass (grams)", "Calories for food item", "Calories per 100 grams"]
 		writer.writerow(data)
+
 		for i in range(0, len(result)):
 			if (fruit_volumes[i] == None):
-				data = [str(image_names[i]), str(responses[i][0]), str(result[i][0]), "--", "--", "--", str(fruit_calories_100grams[i])]
+				data = [str(image_names[i]), str(responses[i][0]), str(result[i]), "--", "--", "--", str(fruit_calories_100grams[i])]
 			else:
-				data = [str(image_names[i]), str(responses[i][0]), str(result[i][0]), str(fruit_volumes[i]), str(fruit_mass[i]), str(fruit_calories[i]), str(fruit_calories_100grams[i])]
+				data = [str(image_names[i]), str(responses[i][0]), str(result[i]), str(fruit_volumes[i]), str(fruit_mass[i]), str(fruit_calories[i]), str(fruit_calories_100grams[i])]
 			writer.writerow(data)
 		outfile.close()
 
+	right = 0
 	for i in range(0, len(mask)):
-		if mask[i][0] == False:
-			print ("(Actual Reponse)", responses[i][0], "(Output)", result[i][0], image_names[i])
+		if responses[i][0] == result[i]:
+			right+=1
+		# if mask[i][0] == False:
+			#print ("(Actual Reponse)", responses[i][0], "(Output)", result[i], image_names[i])
 
-	correct = np.count_nonzero(mask)
-	print (correct*100.0/result.size)
+	#correct = np.count_nonzero(mask)
+	#print (correct*100.0/result.size)
+	print (right/len(mask))
 
 
 
 if __name__ == '__main__':
 	training()
-	# testing()
+	testing()
