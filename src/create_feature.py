@@ -1,10 +1,10 @@
 # Adapted from https://github.com/meghanamreddy/Calorie-estimation-from-food-images-OpenCV/blob/master/create_feature.py
 # density_calorie shows calorie information for 100g of food
 
-from feature_moments import getShapeFeatures
-from feature_gabor import *
-from feature_color import getColorFeature
-from img_seg import *
+from src.feature_moments import getShapeFeatures
+from src.feature_gabor import *
+from src.feature_color import getColorFeature
+from src.img_seg import *
 
 def createFeature(img):
 	'''
@@ -22,7 +22,7 @@ def createFeature(img):
 		feature.append(i)
 	for i in shape:
 		feature.append(i)
-	
+
 	M = max(feature)
 	m = min(feature)
 
