@@ -2,23 +2,24 @@
 
 import numpy as np
 import cv2
-from create_feature import *
-from calorie_calc import *
+from src.create_feature import *
+from src.calorie_calc import *
 import csv
 from sklearn import svm
 import pickle
 
-svm_params = dict(kernel_type = cv2.ml.SVM_LINEAR, svm_type = cv2.ml.SVM_C_SVC, C=2.67, gamma=5.383 )
+# svm_params = dict(kernel_type = cv2.ml.SVM_LINEAR, svm_type = cv2.ml.SVM_C_SVC, C=2.67, gamma=5.383 )
 filename = 'svm_data.dat'
+
 
 def training():
 	feature_mat = []
 	response = []
-	for j in [1,2,3,4,5,6,7,8,9,10,11,12,13,14]:
+	for j in range(1, 15):
 		for i in range(1,21):
-			print ("../Dataset/images/All_Images/"+str(j)+"_"+str(i)+".jpg")
+			print ("./Dataset/images/All_Images/"+str(j)+"_"+str(i)+".jpg")
 			try:
-				fea, farea, skinarea, fcont, pix_to_cm = readFeatureImg("../Dataset/images/All_Images/"+str(j)+"_"+str(i)+".jpg")
+				fea, farea, skinarea, fcont, pix_to_cm = readFeatureImg("./Dataset/images/All_Images/"+str(j)+"_"+str(i)+".jpg")
 				feature_mat.append(fea)
 				response.append(float(j))
 			# sometimes contours not found; need to figure out how to deal if happens w user image
@@ -37,9 +38,6 @@ def training():
 	train_svm.fit(trainData, responses)
 	pickle.dump(train_svm, open(filename, 'wb'))
 
-	# need save functionality for svm
-
-
 
 def testing():
 	#svm_model = cv2.ml.SVM_create()
@@ -56,9 +54,9 @@ def testing():
 	fruit_calories = []
 	skin_areas = []
 	fruit_calories_100grams = []
-	for j in [1,2,3,4,5,6,7,8,9,10,11,12,13,14]:
+	for j in range(1, 15):
 		for i in range(21,26):
-			img_path = "../Dataset/images/Test_Images/"+str(j)+"_"+str(i)+".jpg"
+			img_path = "./Dataset/images/Test_Images/"+str(j)+"_"+str(i)+".jpg"
 			print (img_path)
 			try:
 				fea, farea, skinarea, fcont, pix_to_cm = readFeatureImg(img_path)
@@ -116,4 +114,4 @@ def testing():
 
 if __name__ == '__main__':
 	training()
-	testing()
+	# testing()
