@@ -1,28 +1,54 @@
 from flask import Flask, render_template, request
 from classify import classify
+from Dataset.ClassificationMap import ClassificationMap
 import json
-
-
+import numpy as np
+import cv2
+import os
+import requests
+import time
 
 app = Flask(__name__)
 
 @app.route("/", methods=['POST', 'GET'])
-def index():
+def classify_img():
     if request.method == 'POST':
-        pass
-    else:
-        test_img = "./Dataset/images/Test_Images/1_21.jpg"
-        classification = str(classify_user_img(test_img))
+        s3_url = request.form.get("s3_url")
+        img_filepath = download_url(s3_url)
+        classification = classify(img_filepath)
         if classification:
-            msg = str(classification)
+            classificationMap = ClassificationMap()
+            translated_classification = classificationMap.get_classification(classification[0])
+            msg = translated_classification
+        else:
+            msg = {
+                "Classification failed"
+            }
+        os.remove(img_filepath)
+        return json.dumps(msg)
+    else:
+        s3_url = "https://macro-meals-images.s3.amazonaws.com/1_6.jpg"
+        img_filepath = download_url(s3_url)
+        classification = classify(img_filepath)
+        if classification:
+            classificationMap = ClassificationMap()
+            translated_classification = classificationMap.get_classification(classification[0])
+            msg = translated_classification
+            msg += "\n" + img_filepath
+            os.remove(img_filepath)
         else:
             msg = {
                 "Classification failed"
             }
         return json.dumps(msg)
 
-def classify_user_img(test_img):
-    return classify(test_img)
+def download_url(img_url):
+    img_data = requests.get(img_url).content
+
+    img_filepath = "UserImages/" + str(time.time()) + ".jpg"
+    with open(img_filepath, 'wb') as handler:
+        handler.write(img_data)
+    return img_filepath
 
 if __name__ == "__main__":
     app.run(debug=True)
