@@ -27,14 +27,16 @@ def classify_img():
         os.remove(img_filepath)
         return json.dumps(msg)
     else:
-        s3_url = "https://macro-meals-images.s3.amazonaws.com/1_6.jpg"
+        s3_url = "https://macro-meals-images.s3.amazonaws.com/2_5.jpg"
         img_filepath = download_url(s3_url)
-        classification = classify(img_filepath)
+        classification, calories = classify(img_filepath)
         if classification:
             classificationMap = ClassificationMap()
-            translated_classification = classificationMap.get_classification(classification[0])
+            translated_classification = classificationMap.get_classification(classification)
             msg = translated_classification
-            msg += "\n" + img_filepath
+            # msg += str(calories_list[0])
+            msg += str(calories)
+
             os.remove(img_filepath)
         else:
             msg = {
