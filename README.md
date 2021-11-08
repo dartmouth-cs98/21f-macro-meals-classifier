@@ -8,7 +8,7 @@ App.py hosts uses flask to create a webserver to communicate with the api and ru
 
 ## Setup
 
-All files within this repo can be tested locally by running them with Python. Run `python3 app.py` and open the local server to see classification results. Enter different image urls in 'app.py' to test with various foods.
+All files within this repo can be tested locally by running them with Python. Run `python3 app.py` and open the local server to see classification results. Enter different image urls in `app.py` to test with various foods.
 
 ## Deployment
 
