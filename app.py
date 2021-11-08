@@ -15,16 +15,16 @@ def classify_img():
     if request.method == 'POST':
         s3_url = request.form.get("url")
         img_filepath = download_url(s3_url)
-        # classification = classifier.classify(img_filepath)
+        classifier = Classifier()
+        classification, calories = classifier.classify(img_filepath)
         if classification:
-            # classificationMap = ClassificationMap()
-            # translated_classification = classificationMap.get_classification(classification[0])
-            msg = translated_classification
+            msg = classification
+            msg += str(calories)
+            os.remove(img_filepath)
         else:
             msg = {
                 "Classification failed"
             }
-        # os.remove(img_filepath)
         return json.dumps(msg)
     else:
         classifier = Classifier()
@@ -32,10 +32,7 @@ def classify_img():
         img_filepath = download_url(s3_url)
         classification, calories = classifier.classify(img_filepath)
         if classification:
-            # classificationMap = ClassificationMap()
-            # translated_classification = classificationMap.get_classification(classification)
             msg = classification
-            # msg += str(calories_list[0])
             msg += str(calories)
             os.remove(img_filepath)
         else:
