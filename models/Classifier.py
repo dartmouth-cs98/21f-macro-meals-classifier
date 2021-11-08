@@ -36,8 +36,9 @@ class Classifier:
         for j in range(1, 15):
             for i in range(1, 21):
                 try:
-                    fea, farea, skinarea, fcont, pix_to_cm = readFeatureImg(
-                        folder_path+str(j)+"_"+str(i)+".jpg")
+                    img_path = folder_path+str(j)+"_"+str(i)+".jpg"
+                    print(img_path)
+                    fea, farea, skinarea, fcont, pix_to_cm = self.processor.readFeatureImg(img_path)
                     feature_mat.append(fea)
                     response.append(float(j))
                 # sometimes contours not found; need to figure out how to deal if happens w user image
@@ -52,7 +53,7 @@ class Classifier:
         with open(self.model_file, "wb") as f:
             pickle.dump(train_svm, f)
 
-    def testing(self, folder_path):
+    def test(self, folder_path):
         #svm_model = cv2.ml.SVM_create()
         # svm_model.load('svm_data.dat')
         svm_model = pickle.load(open(model_file, 'rb'))
