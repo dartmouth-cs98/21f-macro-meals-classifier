@@ -172,7 +172,7 @@ class Processor:
                 for ar in [0.8, 2.0]:
                     kern = cv2.getGaborKernel((ksize, ksize), 5.0, theta, wav, ar, 0, ktype=cv2.CV_32F)
                     filters.append(kern)
-        cv2.imshow('filt', filters[9])
+        #cv2.imshow('filt', filters[9])
         return filters
 
     def process_threaded(self, img, filters, threadn = 8):
