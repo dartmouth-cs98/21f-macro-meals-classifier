@@ -6,7 +6,6 @@ import os
 import requests
 import time
 from models.Classifier import Classifier
-from classify import classify
 
 app = Flask(__name__)
 
@@ -28,14 +27,14 @@ def classify_img():
         # os.remove(img_filepath)
         return json.dumps(msg)
     else:
-        # classifier = Classifier()
+        classifier = Classifier()
         s3_url = "https://macro-meals-images.s3.amazonaws.com/2_5.jpg"
         img_filepath = download_url(s3_url)
-        classification, calories = classify(img_filepath)
+        classification, calories = classifier.classify(img_filepath)
         if classification:
             # classificationMap = ClassificationMap()
             # translated_classification = classificationMap.get_classification(classification)
-            msg = str(classification)
+            msg = classification
             # msg += str(calories_list[0])
             msg += str(calories)
             os.remove(img_filepath)
@@ -51,7 +50,6 @@ def download_url(img_url):
     img_filepath = "user_images/" + str(time.time()) + ".jpg"
     with open(img_filepath, 'wb') as handler:
         handler.write(img_data)
-    # handler.close()
     return img_filepath
 
 if __name__ == "__main__":
