@@ -3,7 +3,7 @@ import json
 import numpy as np
 import cv2
 import os
-import requests
+#import requests
 import time
 from models.Classifier import Classifier
 from classify import classify
