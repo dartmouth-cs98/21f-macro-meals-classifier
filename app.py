@@ -5,7 +5,7 @@ import json
 import numpy as np
 import cv2
 import os
-import requests
+#import requests
 import time
 
 app = Flask(__name__)
