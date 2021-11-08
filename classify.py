@@ -1,4 +1,3 @@
-
 import numpy as np
 import cv2
 import csv
@@ -8,7 +7,7 @@ import pickle
 from src.create_feature import *
 from src.calorie_calc import *
 
-model_file = './src/svm_data.dat'
+model_file = 'models/svm_data.dat'
 
 def classify(img_path):
 	#svm_model = cv2.ml.SVM_create()
