@@ -14,7 +14,7 @@ def classify_img():
     classifier = Classifier()
     if request.method == 'POST':
         s3_url = request.json['url']
-        img_filepath = download_url(s3_url)
+        img_filepath = download_url(str(s3_url))
         classifier = Classifier()
         classification, calories = classifier.classify(img_filepath)
         if classification:
