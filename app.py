@@ -18,8 +18,8 @@ def classify_img():
         classifier = Classifier()
         classification, calories = classifier.classify(img_filepath)
         if classification:
-            msg = classification
-            msg += str(calories)
+            msg = "classification: " + classification + ", "
+            msg += "calories: " + str(int(calories))
             os.remove(img_filepath)
         else:
             msg = {
@@ -32,8 +32,8 @@ def classify_img():
         img_filepath = download_url(s3_url)
         classification, calories = classifier.classify(img_filepath)
         if classification:
-            msg = classification
-            msg += str(calories)
+            msg = "classification: " + classification + ", "
+            msg += "calories: " + str(int(calories))
             os.remove(img_filepath)
         else:
             msg = {
