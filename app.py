@@ -13,14 +13,17 @@ app = Flask(__name__)
 def classify_img():
     classifier = Classifier()
     if request.method == 'POST':
+        classifier = Classifier()
         s3_url = request.json['url']
-        img_filepath = download_url(str(json.dumps(s3_url)))
-        return json.dumps(s3_url)
-        # classifier = Classifier()
+        #img_data = requests.get(s3_url).content
+        return json.dumps("hello")
+        # img_filepath = download_url(s3_url)
+        # print(json.dumps(s3_url))
         # classification, calories = classifier.classify(img_filepath)
         # if classification:
         #     # msg = "classification: " + classification + ", "
         #     # msg += "calories: " + str(int(calories))
+        #     os.remove(img_filepath)
         #     msg = {
         #         "classification": classification,
         #         "calories": int(calories),
@@ -28,12 +31,11 @@ def classify_img():
         #         "carbs": 30,
         #         "fats": 30
         #     }
-        #     os.remove(img_filepath)
         # else:
         #     msg = {
         #         "Classification failed"
         #     }
-        # return json.dumps(msg)
+        return json.dumps(msg)
     else:
         classifier = Classifier()
         s3_url = "https://macro-meals-images.s3.amazonaws.com/2_5.jpg"
