@@ -4,8 +4,10 @@ import csv
 from sklearn import svm
 import pickle
 
-from src.create_feature import *
-from src.calorie_calc import *
+
+from models.Processor import *
+#from src.create_feature import *
+#from src.calorie_calc import *
 
 model_file = 'models/svm_data.dat'
 
@@ -17,7 +19,7 @@ def classify(img_path):
 	response = []
 
 	try:
-		fea, farea, skinarea, fcont, pix_to_cm = readFeatureImg(img_path)
+		fea, farea, skinarea, fcont, pix_to_cm = Processor.readFeatureImg(img_path)
 		feature_mat.append(fea)
 		response.append([float(0)])
 	# contour error
@@ -30,7 +32,7 @@ def classify(img_path):
 	mask = result==responses
 
 	#calculate calories
-	volume = getVolume(result[0], farea, skinarea, pix_to_cm, fcont)
-	mass, cal, cal_100 = getCalorie(result[0], volume)
+	volume = Processor.getVolume(result[0], farea, skinarea, pix_to_cm, fcont)
+	mass, cal, cal_100 = Processor.getCalorie(result[0], volume)
 
 	return result[0], cal
