@@ -16,9 +16,11 @@ def classify_img():
         classifier = Classifier()
         s3_url = request.json['url']
         img_data = requests.get(s3_url).content
-        return json.dumps("hello")
+        img_filepath = "user_images/" + str(time.time()) + ".jpg"
+        with open(img_filepath, 'wb') as handler:
+            handler.write(img_data)
+        return json.dumps("pls work")
         # img_filepath = download_url(s3_url)
-        # print(json.dumps(s3_url))
         # classification, calories = classifier.classify(img_filepath)
         # if classification:
         #     # msg = "classification: " + classification + ", "
@@ -35,12 +37,11 @@ def classify_img():
         #     msg = {
         #         "Classification failed"
         #     }
-        return json.dumps(msg)
+        # return json.dumps(msg)
     else:
         classifier = Classifier()
         s3_url = "https://macro-meals-images.s3.amazonaws.com/2_5.jpg"
         img_filepath = download_url(s3_url)
-        print(json.dumps(s3_url))
         classification, calories = classifier.classify(img_filepath)
         if classification:
             # msg = "classification: " + classification + ", "
