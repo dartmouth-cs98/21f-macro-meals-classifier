@@ -15,12 +15,12 @@ def classify_img():
     if request.method == 'POST':
         classifier = Classifier()
         s3_url = request.json['url']
-        img_data = requests.get(s3_url).content
-        img_filepath = "user_images/" + str(time.time()) + ".jpg"
-        with open(img_filepath, 'wb') as handler:
-            handler.write(img_data)
+        # img_data = requests.get(s3_url).content
+        # img_filepath = "user_images/" + str(time.time()) + ".jpg"
+        # with open(img_filepath, 'wb') as handler:
+        #     handler.write(img_data)
+        img_filepath = download_url(s3_url)
         return json.dumps("pls work")
-        # img_filepath = download_url(s3_url)
         # classification, calories = classifier.classify(img_filepath)
         # if classification:
         #     # msg = "classification: " + classification + ", "
