@@ -15,7 +15,7 @@ def classify_img():
     if request.method == 'POST':
         classifier = Classifier()
         s3_url = request.json['url']
-        #img_data = requests.get(s3_url).content
+        img_data = requests.get(s3_url).content
         return json.dumps("hello")
         # img_filepath = download_url(s3_url)
         # print(json.dumps(s3_url))
