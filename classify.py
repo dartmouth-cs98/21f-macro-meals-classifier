@@ -33,6 +33,6 @@ def classify(img_path):
 
 	#calculate calories
 	volume = Processor.getVolume(result[0], farea, skinarea, pix_to_cm, fcont)
-	mass, cal, cal_100 = Processor.getCalorie(result[0], volume)
+	mass, cal, protein, carb, fat, cal_100, protein_100, carb_100, fat_100 = Processor.getCalorie(result[0], volume)
 
-	return result[0], cal
+	return result[0], cal, protein, carb, fat
