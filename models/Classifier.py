@@ -95,7 +95,7 @@ class Classifier:
         for i in range(0, len(result)):
             volume = getVolume(result[i], fruit_areas[i],
                                skin_areas[i], pix_cm[i], fruit_contours[i])
-            mass, cal, cal_100 = getCalorie(result[i], volume)
+            mass, cal, protein, carb, fat, cal_100, protein_100, carb_100, fat_100 = getMacros(result[i], volume)
             fruit_volumes.append(volume)
             fruit_calories.append(cal)
             fruit_calories_100grams.append(cal_100)
@@ -156,6 +156,6 @@ class Classifier:
         # calculate calories
         volume = self.processor.getVolume(
             result[0], farea, skinarea, pix_to_cm, fcont)
-        mass, cal, cal_100 = self.processor.getCalorie(result[0], volume)
+        mass, cal, protein, carb, fat, cal_100, protein_100, carb_100, fat_100 = self.processor.getMacros(result[0], volume)
 
-        return self.index2classification[int(result[0])], cal
+        return self.index2classification[int(result[0])], cal, protein, carb, fat
