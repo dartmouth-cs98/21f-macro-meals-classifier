@@ -32,6 +32,7 @@ def classify_img():
 			msg = {
 				"Classification failed"
 			}
+		return json.dumps(msg)
 	else:
 		classifier = Classifier()
 		s3_url = "https://macro-meals-images.s3.amazonaws.com/2_5.jpg"
