@@ -28,16 +28,17 @@ def classify_img():
 				"carbs": int(carb),
 				"fats": int(fat)
 			}
-		except IndexError:
-			msg = {
-				"Classification failed"
-			}
+		except TypeError:
+			msg = "Classification failed"
+		return json.dumps(msg)
 	else:
 		classifier = Classifier()
-		s3_url = "https://macro-meals-images.s3.amazonaws.com/2_5.jpg"
-		img_filepath = download_url(s3_url)
-		classification, calories, protein, carb, fat = classifier.classify(img_filepath)
-		if classification:
+		# s3_url = "https://macro-meals-images.s3.amazonaws.com/2_5.jpg"
+		# s3_url = "https://macro-meals-images.s3.amazonaws.com/20211114T1932"
+		# img_filepath = download_url(s3_url)
+		img_filepath = "train_images/All_Images/6_13.jpg"
+		try:
+			classification, calories, protein, carb, fat = classifier.classify(img_filepath)
 			# msg = "classification: " + classification + ", "
 			# msg += "calories: " + str(int(calories))
 			os.remove(img_filepath)
@@ -48,10 +49,8 @@ def classify_img():
 				"carbs": int(carb),
 				"fats": int(fat)
 			}
-		else:
-			msg = {
-				"Classification failed"
-			}
+		except TypeError:
+			msg = "Classification failed"
 		return json.dumps(msg)
 
 def download_url(img_url):

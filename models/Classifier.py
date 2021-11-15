@@ -43,7 +43,7 @@ class Classifier:
                     response.append(float(j))
                 # sometimes contours not found; need to figure out how to deal if happens w user image
                 except IndexError:
-                    print("Ignoring file:")
+                    print("Ignoring file^")
 
         trainData = np.float32(feature_mat).reshape(-1, 94)
         responses = np.float32(response)
