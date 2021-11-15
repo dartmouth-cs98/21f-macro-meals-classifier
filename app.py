@@ -30,6 +30,7 @@ def classify_img():
 			}
 		except TypeError:
 			msg = "Classification failed"
+
 		return json.dumps(msg)
 	else:
 		classifier = Classifier()
