@@ -4,6 +4,7 @@ import sys
 import pickle
 from models.Processor import Processor
 from sklearn import svm
+import os
 
 class Classifier:
 
@@ -25,7 +26,7 @@ class Classifier:
         "watermelon"
     ]
 
-    model_file = 'models/svm_data.dat'
+    model_file = 'models/svm_data2.dat'
 
     def __init__(self):
         self.processor = Processor()
@@ -44,6 +45,36 @@ class Classifier:
                 # sometimes contours not found; need to figure out how to deal if happens w user image
                 except IndexError:
                     print("Ignoring file^")
+
+        trainData = np.float32(feature_mat).reshape(-1, 94)
+        responses = np.float32(response)
+
+        train_svm = svm.SVC()
+        train_svm.fit(trainData, responses)
+        with open(self.model_file, "wb") as f:
+            pickle.dump(train_svm, f)
+
+    def train2(self):
+        feature_mat = []
+        response = []
+        for j in range(460):
+            try:
+                fea, farea, skinarea, fcont, pix_to_cm = self.processor.readFeatureImg("train_images/Apple/"+"1_"+str(j+1)+".jpg")
+                print("train_images/Apple/"+"1_"+str(j+1)+".jpg")
+                feature_mat.append(fea)
+                response.append(1)
+                # sometimes contours not found; need to figure out how to deal if happens w user image
+            except IndexError:
+                print("Ignoring file^")
+        for j in range(144):
+            try:
+                fea, farea, skinarea, fcont, pix_to_cm = self.processor.readFeatureImg("train_images/Banana/"+"2_"+str(j+1)+".jpg")
+                print("train_images/Banana/"+"2_"+str(j+1)+".jpg")
+                feature_mat.append(fea)
+                response.append(2)
+                # sometimes contours not found; need to figure out how to deal if happens w user image
+            except IndexError:
+                print("Ignoring file^")
 
         trainData = np.float32(feature_mat).reshape(-1, 94)
         responses = np.float32(response)
