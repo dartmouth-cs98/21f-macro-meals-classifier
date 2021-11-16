@@ -37,12 +37,12 @@ def classify_img():
 		# s3_url = "https://macro-meals-images.s3.amazonaws.com/2_5.jpg"
 		# s3_url = "https://macro-meals-images.s3.amazonaws.com/20211114T1932"
 		# img_filepath = download_url(s3_url)
-		img_filepath = "train_images/All_Images/6_13.jpg"
+		img_filepath = "train_images/All_Images/1_3.jpg"
 		try:
 			classification, calories, protein, carb, fat = classifier.classify(img_filepath)
 			# msg = "classification: " + classification + ", "
 			# msg += "calories: " + str(int(calories))
-			os.remove(img_filepath)
+			# os.remove(img_filepath)
 			msg = {
 				"classification": classification,
 				"calories": int(calories),
