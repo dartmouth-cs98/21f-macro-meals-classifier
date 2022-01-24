@@ -3,6 +3,8 @@ from cnn_model import get_model
 import os  
 import cv2
 import numpy as np
+import tensorflow as tf
+
 
 IMG_SIZE = 400
 LR = 1e-3
@@ -14,7 +16,9 @@ model_save_at=os.path.join("model",MODEL_NAME)
 
 model=get_model(IMG_SIZE,no_of_fruits,LR)
 
-model.load(model_save_at)
+#model.load(model_save_at)
+model = tf.keras.models.load_model(model_save_at)
+
 labels=list(np.load('labels.npy'))
 
 test_data='test_image.JPG'
