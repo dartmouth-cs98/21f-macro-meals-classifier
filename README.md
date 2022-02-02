@@ -27,3 +27,7 @@ Anand Mittal, Brandon Feng, Quinn Spraut, Alex Wong
 A large majority of the OpenCV source code was adapted from [this project](https://github.com/meghanamreddy/Calorie-estimation-from-food-images-OpenCV)
 
 https://www.youtube.com/watch?v=Z1RJmh_OqeA&ab_channel=freeCodeCamp.org
+
+## Newer Version
+
+See a newer version of our model at: https://github.com/dartmouth-cs98/macro-classifier2
