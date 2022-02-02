@@ -28,6 +28,36 @@ class Classifier:
 
     model_file = 'models/svm_data2.dat'
 
+    # constraints for sanity check
+    # classification2floor = {
+    #     "none": (0, 0, 0, 0),
+    #     "apple":
+    # }
+
+    # classification2floor_vol = {
+    #     "apple": 50,
+    #     "banana": 50,
+    #     "beans":
+    # }
+
+    # in cm^3
+    classification2ceiling_vol = {
+        "apple": 250,
+        "banana": 200,
+        "beans": 2000,
+        "carrot": 200,
+        "cheese": 2000,
+        "cucumber": 400,
+        "onion": 800,
+        "orange": 300,
+        "pasta": 2000,
+        "pepper": 2000,
+        "qiwi": 250,
+        "sauce": 2000,
+        "tomato": 350,
+        "watermelon": 2500
+    }
+
     def __init__(self):
         self.processor = Processor()
 
@@ -160,6 +190,21 @@ class Classifier:
         #print (correct*100.0/result.size)
         print(right/len(mask))
 
+    # for sanity check
+    def constraint_check(self, classification, vol):
+
+        if classification != "none":
+            vol_ceiling = self.classification2ceiling_vol[classification]
+            if vol > vol_ceiling:
+                return vol_ceiling
+
+            vol_floor = 100  # modify later
+            if vol < vol_floor:
+                return vol_floor
+
+        return vol
+
+
     def classify(self, img_path):
 
         #svm_model = cv2.ml.SVM_create()
@@ -187,6 +232,11 @@ class Classifier:
         # calculate calories
         volume = self.processor.getVolume(
             result[0], farea, skinarea, pix_to_cm, fcont)
+        # volume = 5000
+
+        classification = self.index2classification[int(result[0])]
+        # volume = 5000
+        volume = self.constraint_check(classification, volume)
         mass, cal, protein, carb, fat, cal_100, protein_100, carb_100, fat_100 = self.processor.getMacros(result[0], volume)
 
-        return self.index2classification[int(result[0])], cal, protein, carb, fat
+        return classification, cal, protein, carb, fat
