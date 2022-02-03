@@ -134,8 +134,10 @@ class Processor:
 		carb = self.carb_dict[int(label)]
 		fat = self.fat_dict[int(label)]
 
+
 		if (volume == None):
 			return None, None, calorie
+			# return None, None, None, None, None, calorie, None, None, None
 		density = self.density_dict[int(label)]
 		mass = volume*density*1.0
 		calorie_tot = (calorie/100.0)*mass
