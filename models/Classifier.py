@@ -5,6 +5,7 @@ import pickle
 from models.Processor import Processor
 from sklearn import svm
 import os
+import csv
 
 class Classifier:
 
@@ -26,13 +27,9 @@ class Classifier:
         "watermelon"
     ]
 
-    model_file = 'models/svm_data2.dat'
-
-    # constraints for sanity check
-    # classification2floor = {
-    #     "none": (0, 0, 0, 0),
-    #     "apple":
-    # }
+    # model_file = 'models/svm_data.dat'
+    # model_file = 'models/svm_data2.dat'
+    model_file = 'models/svm_data3.dat'
 
     # classification2floor_vol = {
     #     "apple": 50,
@@ -64,10 +61,17 @@ class Classifier:
     def train(self, folder_path):
         feature_mat = []
         response = []
-        for j in range(1, 15):
-            for i in range(1, 21):
+        for food_type in os.listdir(folder_path):
+            try:
+                j = self.index2classification.index(food_type.lower())
+                print("j: " + str(j))
+            except ValueError:
+                continue
+            for file_name in os.listdir(folder_path + "/" + food_type):
+                if file_name == "script.sh" or file_name == "script.sh~":
+                    continue
                 try:
-                    img_path = folder_path+str(j)+"_"+str(i)+".jpg"
+                    img_path = folder_path+"/"+food_type+"/"+file_name
                     print(img_path)
                     fea, farea, skinarea, fcont, pix_to_cm = self.processor.readFeatureImg(img_path)
                     feature_mat.append(fea)
@@ -117,7 +121,7 @@ class Classifier:
     def test(self, folder_path):
         #svm_model = cv2.ml.SVM_create()
         # svm_model.load('svm_data.dat')
-        svm_model = pickle.load(open(model_file, 'rb'))
+        svm_model = pickle.load(open(self.model_file, 'rb'))
         feature_mat = []
         response = []
         image_names = []
@@ -134,7 +138,7 @@ class Classifier:
                 img_path = folder_path+str(j)+"_"+str(i)+".jpg"
                 print(img_path)
                 try:
-                    fea, farea, skinarea, fcont, pix_to_cm = readFeatureImg(
+                    fea, farea, skinarea, fcont, pix_to_cm = self.processor.readFeatureImg(
                         img_path)
                     pix_cm.append(pix_to_cm)
                     fruit_contours.append(fcont)
@@ -154,9 +158,17 @@ class Classifier:
 
         # calculate calories
         for i in range(0, len(result)):
-            volume = getVolume(result[i], fruit_areas[i],
+            volume = self.processor.getVolume(result[i], fruit_areas[i],
                                skin_areas[i], pix_cm[i], fruit_contours[i])
-            mass, cal, protein, carb, fat, cal_100, protein_100, carb_100, fat_100 = getMacros(result[i], volume)
+            macros = self.processor.getMacros(result[i], volume)
+            if len(macros) == 3:
+                mass, cal, cal_100 = macros
+            else:
+                mass = macros[0]
+                cal = macros[1]
+                cal_100 = macros[5]
+		    # mass, cal, cal_100 = self.processor.getMacros(result[i], volume)[0:3]
+            # mass, cal, protein, carb, fat, cal_100, protein_100, carb_100, fat_100 = self.processor.getMacros(result[i], volume)
             fruit_volumes.append(volume)
             fruit_calories.append(cal)
             fruit_calories_100grams.append(cal_100)
@@ -183,11 +195,15 @@ class Classifier:
         for i in range(0, len(mask)):
             if responses[i][0] == result[i]:
                 right += 1
+            # else:
+            #     print("actual: " + (result[i][0]))
+            #     print("output: " + result[i])
             # if mask[i][0] == False:
                 #print ("(Actual Reponse)", responses[i][0], "(Output)", result[i], image_names[i])
 
         #correct = np.count_nonzero(mask)
         #print (correct*100.0/result.size)
+        print("accuracy rate:")
         print(right/len(mask))
 
     # for sanity check
