@@ -24,12 +24,19 @@ class Classifier:
         "qiwi",
         "sauce",
         "tomato",
-        "watermelon"
+        "watermelon",
+        "cabbage",
+        "eggplant",
+        "pear",
+        "zucchini"
     ]
 
     # model_file = 'models/svm_data.dat'
     # model_file = 'models/svm_data2.dat'
-    model_file = 'models/svm_data3.dat'
+    # model_file = 'models/svm_data3.dat'
+    # model_file = 'models/svm_data4.dat'
+    # model_file = 'models/svm_data_final.dat'
+    model_file = 'models/svm_data_final2.dat'
 
     # classification2floor_vol = {
     #     "apple": 50,
@@ -52,7 +59,11 @@ class Classifier:
         "qiwi": 250,
         "sauce": 2000,
         "tomato": 350,
-        "watermelon": 2500
+        "watermelon": 2500,
+        "cabbage": 1500,
+        "eggplant": 600,
+        "pear": 300,
+        "zucchini": 1000
     }
 
     def __init__(self):
@@ -83,7 +94,7 @@ class Classifier:
         trainData = np.float32(feature_mat).reshape(-1, 94)
         responses = np.float32(response)
 
-        train_svm = svm.SVC()
+        train_svm = svm.SVC(probability=True)
         train_svm.fit(trainData, responses)
         with open(self.model_file, "wb") as f:
             pickle.dump(train_svm, f)
@@ -243,16 +254,32 @@ class Classifier:
         testData = np.float32(feature_mat).reshape(-1, 94)
         responses = np.float32(response)
         result = svm_model.predict(testData)
+        probabilities = svm_model.predict_proba(testData)[0]
+        max_prob = max(probabilities)
+        # print(result)
+        print(result)
+        print(probabilities)
+        # max_index = np.where(result==max_prob)
+
+        # print(max_prob)
+        # print(result)
         mask = result == responses
 
         # calculate calories
+        # volume = self.processor.getVolume(
+        #     result[0], farea, skinarea, pix_to_cm, fcont)
         volume = self.processor.getVolume(
             result[0], farea, skinarea, pix_to_cm, fcont)
         # volume = 5000
+        # print(volume)
 
+        # classification = self.index2classification[int(result[0])]
         classification = self.index2classification[int(result[0])]
+
         # volume = 5000
         volume = self.constraint_check(classification, volume)
         mass, cal, protein, carb, fat, cal_100, protein_100, carb_100, fat_100 = self.processor.getMacros(result[0], volume)
 
-        return classification, cal, protein, carb, fat
+        # print(max_prob)
+
+        return classification, cal, protein, carb, fat, max_prob
