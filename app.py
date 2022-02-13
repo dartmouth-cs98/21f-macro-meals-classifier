@@ -17,20 +17,20 @@ def classify_img():
 		s3_url = request.json['url']
 		img_filepath = download_url(s3_url)
 		try:
-			classification, calories, protein, carb, fat = classifier.classify(img_filepath)
+			classification, calories, protein, carb, fat, confidence_score = classifier.classify(img_filepath)
 			# msg = "classification: " + classification + ", "
 			# msg += "calories: " + str(int(calories))
-			os.remove(img_filepath)
+			# os.remove(img_filepath)
 			msg = {
 				"classification": classification,
 				"calories": int(calories),
 				"protein": int(protein),
 				"carbs": int(carb),
-				"fats": int(fat)
+				"fats": int(fat),
+				"confidence": confidence_score
 			}
 		except TypeError:
 			msg = "Classification failed"
-
 		return json.dumps(msg)
 	else:
 		classifier = Classifier()
