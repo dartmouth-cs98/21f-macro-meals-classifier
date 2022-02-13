@@ -282,7 +282,7 @@ class Classifier:
 
         # volume = 5000
         volume = self.constraint_check(classification, volume)
-        mass, cal, protein, carb, fat, cal_100, protein_100, carb_100, fat_100 = self.processor.getMacros(result[0], volume)
+        mass, cal, protein, carb, fat = self.processor.getMacros(result[0], volume)
 
         # print(max_prob)
 
