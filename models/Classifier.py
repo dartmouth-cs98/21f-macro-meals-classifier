@@ -36,7 +36,7 @@ class Classifier:
     # model_file = 'models/svm_data3.dat'
     # model_file = 'models/svm_data4.dat'
     # model_file = 'models/svm_data_final.dat'
-    model_file = 'models/svm_data_final2.dat'
+    model_file = 'models/svm_data4.dat'
 
     # classification2floor_vol = {
     #     "apple": 50,
