@@ -40,7 +40,7 @@ class Classifier:
     # model_file = 'models/svm_data_final2.dat'
     # with train_images_2
     # model_file = 'models/svm_data_final3.dat'
-    model_file = 'models/svm_data4.dat'
+    model_file = 'models/svm_data_final2.dat'
 
     # classification2floor_vol = {
     #     "apple": 50,
