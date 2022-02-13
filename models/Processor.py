@@ -132,13 +132,10 @@ class Processor:
 		so that the food item can be identified uniquely.
 		The calorie content in the given volume of the food item is calculated.
 		'''
-		# protein = self.protein_dict[int(label)]
-		# carb = self.carb_dict[int(label)]
-		# fat = self.fat_dict[int(label)]
-
-		# 4 calories carb 4 protein 9 fat
+		protein = self.protein_dict[int(label)]
+		carb = self.carb_dict[int(label)]
+		fat = self.fat_dict[int(label)]
 		calorie = self.calorie_dict[int(label)]
-
 
 		if (volume == None):
 			return None, None, calorie
@@ -146,13 +143,13 @@ class Processor:
 		density = self.density_dict[int(label)]
 		mass = volume*density*1.0
 		calorie_tot = (calorie/100.0)*mass
-		protein_tot = calorie_tot / 4.0
-		carb_tot = calorie_tot / 4.0
-		fat_tot = calorie_tot / 9.0
+		# protein_tot = calorie_tot / 4.0
+		# carb_tot = calorie_tot / 4.0
+		# fat_tot = calorie_tot / 9.0
 
-		# protein_tot = (protein/100.0)*mass
-		# carb_tot = (carb/100.0)*mass
-		# fat_tot = (fat/100.0)*mass
+		protein_tot = (protein/100.0)*mass
+		carb_tot = (carb/100.0)*mass
+		fat_tot = (fat/100.0)*mass
 		# fat_tot = fat
 
 		return mass, calorie_tot, protein_tot, carb_tot, fat_tot #calorie per 100 grams
