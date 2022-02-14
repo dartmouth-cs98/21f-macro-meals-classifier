@@ -37,20 +37,22 @@ def classify_img():
 		# s3_url = "https://macro-meals-images.s3.amazonaws.com/2_5.jpg"
 		# s3_url = "https://macro-meals-images.s3.amazonaws.com/20211114T1932"
 		# img_filepath = download_url(s3_url)
-		img_filepath = "test_images/1_21.jpg"
+		img_filepath = "train_images/Cheese/5_18.jpg"
+		# /*** # cv2 error for 2_50 ***/
 		try:
-			classification, calories, protein, carb, fat, confidence_score = classifier.classify(img_filepath)
+			classification, calories, protein, carb, fat, confidence_score, food2probability = classifier.classify(img_filepath)
 			# msg = "classification: " + classification + ", "
 			# msg += "calories: " + str(int(calories))
 			# os.remove(img_filepath)
 			msg = {
 				"classification": classification,
-				"calories": round(calories,1),
-				"protein": round(protein,1),
-				"carbs": round(carb,1),
-				"fats": round(fat,1),
-				"confidence": round(confidence_score,3)
-			}
+				"calories": int(calories),
+				"protein": int(protein),
+				"carbs": int(carb),
+				"fats": int(fat),
+				"confidence": confidence_score,
+				"top 3 foods": food2probability
+				}
 		except TypeError:
 			msg = "Classification failed"
 		return json.dumps(msg)

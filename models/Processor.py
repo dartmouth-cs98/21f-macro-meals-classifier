@@ -102,11 +102,13 @@ class Processor:
 		mask_skin = np.zeros(skin.shape, np.uint8)
 		largest_areas = sorted(contours, key=cv2.contourArea)
 
-		# try:
-		cv2.drawContours(mask_skin, [largest_areas[-2]], 0, (255,255,255), -1)
-		# except IndexError:
-		# 	print("debug: no contours found")
-		# 	return False
+		try:
+			# print(len(largest_areas))
+			cv2.drawContours(mask_skin, [largest_areas[-2]], 0, (255,255,255), -1)
+		except IndexError:
+			# exit()
+			print("debug: no contours found")
+			# return False
 
 		skin_rect = cv2.minAreaRect(largest_areas[-2])
 		box = cv2.boxPoints(skin_rect)
@@ -143,10 +145,6 @@ class Processor:
 		density = self.density_dict[int(label)]
 		mass = volume*density*1.0
 		calorie_tot = (calorie/100.0)*mass
-		# protein_tot = calorie_tot / 4.0
-		# carb_tot = calorie_tot / 4.0
-		# fat_tot = calorie_tot / 9.0
-
 		protein_tot = (protein/100.0)*mass
 		carb_tot = (carb/100.0)*mass
 		fat_tot = (fat/100.0)*mass
