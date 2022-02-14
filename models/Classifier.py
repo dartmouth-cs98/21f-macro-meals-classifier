@@ -38,7 +38,7 @@ class Classifier:
     # model_file = 'models/svm_data_final.dat'
     # with train_images
     model_file = 'models/svm_data_final2.dat'
-    # with train_images_2
+    # with train_images_broken
     # model_file = 'models/svm_data_final3.dat'
 
 
@@ -167,49 +167,64 @@ class Classifier:
 
         testData = np.float32(feature_mat).reshape(-1, 94)
         responses = np.float32(response)
+        # print(responses)
+
         #result = svm_model.predict_all(testData)
-        result = svm_model.predict(testData)
-        mask = result == responses
+        final_result = []
+        result = svm_model.predict_proba(testData)
+        print(result)
+        for probability_list in result:
+            max_prob = max(probability_list)
+            max_index = np.where(probability_list==max_prob)[0] + 1
+            # print(max_index)
+            final_result.append(max_index)
+
+        print(final_result)
+
+        # mask = final_result == responses
 
         # calculate calories
-        for i in range(0, len(result)):
-            volume = self.processor.getVolume(result[i], fruit_areas[i],
-                               skin_areas[i], pix_cm[i], fruit_contours[i])
-            macros = self.processor.getMacros(result[i], volume)
-            if len(macros) == 3:
-                mass, cal, cal_100 = macros
-            else:
-                mass = macros[0]
-                cal = macros[1]
-                cal_100 = macros[5]
-		    # mass, cal, cal_100 = self.processor.getMacros(result[i], volume)[0:3]
-            # mass, cal, protein, carb, fat, cal_100, protein_100, carb_100, fat_100 = self.processor.getMacros(result[i], volume)
-            fruit_volumes.append(volume)
-            fruit_calories.append(cal)
-            fruit_calories_100grams.append(cal_100)
-            fruit_mass.append(mass)
+        # for i in range(0, len(result)):
+        #     volume = self.processor.getVolume(result[i], fruit_areas[i],
+        #                        skin_areas[i], pix_cm[i], fruit_contours[i])
+        #     macros = self.processor.getMacros(result[i], volume)
+        #     # if len(macros) == 3:
+        #     mass, cal, cal_100 = macros
+        #     # else:
+        #     #     mass = macros[0]
+        #     #     cal = macros[1]
+        #     #     cal_100 = macros[5]
+		#     # mass, cal, cal_100 = self.processor.getMacros(result[i], volume)[0:3]
+        #     # mass, cal, protein, carb, fat, cal_100, protein_100, carb_100, fat_100 = self.processor.getMacros(result[i], volume)
+        #     fruit_volumes.append(volume)
+        #     fruit_calories.append(cal)
+        #     fruit_calories_100grams.append(cal_100)
+        #     fruit_mass.append(mass)
 
         # write into csv file
-        with open('output.csv', 'w') as outfile:
-            writer = csv.writer(outfile)
-            data = ["Image name", "Desired response", "Output label",
-                    "Volume (cm^3)", "Mass (grams)", "Calories for food item", "Calories per 100 grams"]
-            writer.writerow(data)
-
-            for i in range(0, len(result)):
-                if (fruit_volumes[i] == None):
-                    data = [str(image_names[i]), str(responses[i][0]), str(
-                        result[i]), "--", "--", "--", str(fruit_calories_100grams[i])]
-                else:
-                    data = [str(image_names[i]), str(responses[i][0]), str(result[i]), str(fruit_volumes[i]), str(
-                        fruit_mass[i]), str(fruit_calories[i]), str(fruit_calories_100grams[i])]
-                writer.writerow(data)
-            outfile.close()
+        # with open('output.csv', 'w') as outfile:
+        #     writer = csv.writer(outfile)
+        #     data = ["Image name", "Desired response", "Output label",
+        #             "Volume (cm^3)", "Mass (grams)", "Calories for food item", "Calories per 100 grams"]
+        #     writer.writerow(data)
+        #
+        #     for i in range(0, len(result)):
+        #         if (fruit_volumes[i] == None):
+        #             data = [str(image_names[i]), str(responses[i][0]), str(
+        #                 result[i]), "--", "--", "--", str(fruit_calories_100grams[i])]
+        #         else:
+        #             data = [str(image_names[i]), str(responses[i][0]), str(result[i]), str(fruit_volumes[i]), str(
+        #                 fruit_mass[i]), str(fruit_calories[i]), str(fruit_calories_100grams[i])]
+        #         writer.writerow(data)
+        #     outfile.close()
 
         right = 0
-        for i in range(0, len(mask)):
-            if responses[i][0] == result[i]:
+        for i in range(len(responses)):
+            if response[i][0] ==  final_result[i]:
                 right += 1
+        # for i in range(0, len(mask)):
+        #     if responses[i][0] == final_result[i]:
+        #         right += 1
             # else:
             #     print("actual: " + (result[i][0]))
             #     print("output: " + result[i])
@@ -219,7 +234,46 @@ class Classifier:
         #correct = np.count_nonzero(mask)
         #print (correct*100.0/result.size)
         print("accuracy rate:")
-        print(right/len(mask))
+        print(right/len(responses))
+
+    def test2(self, folder_path):
+
+        svm_model = pickle.load(open(self.model_file, 'rb'))
+        feature_mat = []
+        response = []
+        image_names = []
+        pix_cm = []
+        fruit_contours = []
+        fruit_areas = []
+        fruit_volumes = []
+        fruit_mass = []
+        fruit_calories = []
+        skin_areas = []
+        fruit_calories_100grams = []
+        for j in range(1, 15):
+            for i in range(21, 26):
+                img_path = folder_path+str(j)+"_"+str(i)+".jpg"
+                print(img_path)
+                try:
+                    fea, farea, skinarea, fcont, pix_to_cm = self.processor.readFeatureImg(
+                        img_path)
+                    pix_cm.append(pix_to_cm)
+                    fruit_contours.append(fcont)
+                    fruit_areas.append(farea)
+                    feature_mat.append(fea)
+                    skin_areas.append(skinarea)
+                    response.append([float(j)])
+                    image_names.append(img_path)
+                except IndexError:
+                    print("Ignoring file:")
+
+        testData = np.float32(feature_mat).reshape(-1, 94)
+        responses = np.float32(response)
+        #result = svm_model.predict_all(testData)
+        result = svm_model.predict(testData)
+        print(result)
+
+        mask = result == responses
 
     # for sanity check
     def constraint_check(self, classification, vol):
@@ -257,33 +311,57 @@ class Classifier:
 
         testData = np.float32(feature_mat).reshape(-1, 94)
         responses = np.float32(response)
-        result = svm_model.predict(testData)
+        # result = svm_model.predict(testData)
         probabilities = svm_model.predict_proba(testData)[0]
+
+        # ind = np.argpartition(probabilities, -3)[-3:]
+        indices = probabilities.argsort()[-3:][::-1]
+        print(indices)
+        food2probability = {
+            self.index2classification[indices[0]+1]: probabilities[indices[0]],
+            self.index2classification[indices[1]+1]: probabilities[indices[1]],
+            self.index2classification[indices[2]+1]: probabilities[indices[2]],
+        }
+        max_index = indices[0] + 1
+        # print()
         max_prob = max(probabilities)
-        # print(result)
-        print(result)
-        print(probabilities)
+        # print(indices)
+        classification = self.index2classification[max_index]
         # max_index = np.where(result==max_prob)
+        #
+        # probabilities[max_index] = 0
+        # second_max_prob = max(probabilities)
+        # second_index = np.where(result == second_max_prob)
+        # #
+        # probabilities[second_index] = 0
+        # second_max_prob = max(probabilities)
+        # second_index = np.where(result == second_max_prob)
+
+        # print(result)
+        # print(result)
+        # print(probabilities)
+        # print(svm_model.classes_)
+
 
         # print(max_prob)
         # print(result)
-        mask = result == responses
+        # mask = result == responses
 
         # calculate calories
         # volume = self.processor.getVolume(
         #     result[0], farea, skinarea, pix_to_cm, fcont)
         volume = self.processor.getVolume(
-            result[0], farea, skinarea, pix_to_cm, fcont)
+            max_index, farea, skinarea, pix_to_cm, fcont)
         # volume = 5000
         # print(volume)
 
         # classification = self.index2classification[int(result[0])]
-        classification = self.index2classification[int(result[0])]
+        classification = self.index2classification[max_index]
 
         # volume = 5000
         volume = self.constraint_check(classification, volume)
-        mass, cal, protein, carb, fat = self.processor.getMacros(result[0], volume)
+        mass, cal, protein, carb, fat = self.processor.getMacros(max_index, volume)
 
         # print(max_prob)
 
-        return classification, cal, protein, carb, fat, max_prob
+        return classification, cal, protein, carb, fat, max_prob, food2probability
