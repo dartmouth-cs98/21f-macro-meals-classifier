@@ -321,9 +321,9 @@ class Classifier:
         dict = {}
 
         dict = {
-            1: indices[0] + 1,
-            2: indices[1] + 1,
-            3: indices[2] + 1
+            "one": indices[0] + 1,
+            "two": indices[1] + 1,
+            "three": indices[2] + 1
         }
 
         print(dict)
