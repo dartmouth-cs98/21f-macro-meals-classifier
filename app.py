@@ -23,11 +23,11 @@ def classify_img():
 			# os.remove(img_filepath)
 			msg = {
 				"classification": classification,
-				"calories": int(calories),
-				"protein": int(protein),
-				"carbs": int(carb),
-				"fats": int(fat),
-				"confidence": confidence_score,
+				"calories": round(calories, 2),
+				"protein": round(protein, 2),
+				"carbs": round(carb, 2),
+				"fats": round(fat, 2),
+				"confidence": round(confidence_score, 3),
 				"top 3 foods": food2probability
 				}
 		except TypeError:
@@ -38,7 +38,7 @@ def classify_img():
 		# s3_url = "https://macro-meals-images.s3.amazonaws.com/2_5.jpg"
 		# s3_url = "https://macro-meals-images.s3.amazonaws.com/20211114T1932"
 		# img_filepath = download_url(s3_url)
-		img_filepath = "train_images/Cheese/5_18.jpg"
+		img_filepath = "test_images/1_21.jpg"
 		# /*** # cv2 error for 2_50 ***/
 		try:
 			classification, calories, protein, carb, fat, confidence_score, food2probability = classifier.classify(img_filepath)
@@ -47,11 +47,11 @@ def classify_img():
 			# os.remove(img_filepath)
 			msg = {
 				"classification": classification,
-				"calories": int(calories),
-				"protein": int(protein),
-				"carbs": int(carb),
-				"fats": int(fat),
-				"confidence": confidence_score,
+				"calories": round(calories, 2),
+				"protein": round(protein, 2),
+				"carbs": round(carb, 2),
+				"fats": round(fat, 2),
+				"confidence": round(confidence_score, 3),
 				"top 3 foods": food2probability
 				}
 		except TypeError:
