@@ -18,19 +18,10 @@ def classify_img():
 		img_filepath = download_url(s3_url)
 		try:
 			msg = classifier.classify(img_filepath)
-			# msg = "classification: " + classification + ", "
-			# msg += "calories: " + str(int(calories))
 			os.remove(img_filepath)
-			# msg = {
-			# 	"classification": classification,
-			# 	"calories": int(calories),
-			# 	"protein": int(protein),
-			# 	"carbs": int(carb),
-			# 	"fats": int(fat)
-			# }
+
 		except TypeError:
 			msg = "Classification failed"
-
 		return json.dumps(msg)
 	else:
 		classifier = Classifier()
@@ -44,15 +35,6 @@ def classify_img():
 			# msg = "classification: " + classification + ", "
 			# msg += "calories: " + str(int(calories))
 			# os.remove(img_filepath)
-			# msg = {
-			# 	"classification": classification,
-			# 	"calories": int(calories),
-			# 	"protein": int(protein),
-			# 	"carbs": int(carb),
-			# 	"fats": int(fat),
-			# 	"confidence": confidence_score,
-			# 	"top 3 foods": food2probability
-			# 	}
 		except TypeError:
 			msg = "Classification failed"
 		return json.dumps(msg)
