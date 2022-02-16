@@ -318,16 +318,28 @@ class Classifier:
         # ind = np.argpartition(probabilities, -3)[-3:]
         indices = probabilities.argsort()[-3:][::-1]
         print(indices)
-        food2probability = {
-            self.index2classification[indices[0]+1]: probabilities[indices[0]],
-            self.index2classification[indices[1]+1]: probabilities[indices[1]],
-            self.index2classification[indices[2]+1]: probabilities[indices[2]],
+        dict = {}
+
+        dict = {
+            1: indices[0] + 1,
+            2: indices[1] + 1,
+            3: indices[2] + 1
         }
-        max_index = indices[0] + 1
-        # print()
-        max_prob = max(probabilities)
-        # print(indices)
-        classification = self.index2classification[max_index]
+
+        print(dict)
+
+        # dict[]
+        #
+        # food2probability = {
+        #     self.index2classification[indices[0]+1]: probabilities[indices[0]],
+        #     self.index2classification[indices[1]+1]: probabilities[indices[1]],
+        #     self.index2classification[indices[2]+1]: probabilities[indices[2]],
+        # # }
+        # max_index = indices[0] + 1
+        # # print()
+        # max_prob = max(probabilities)
+        # # print(indices)
+        # classification = self.index2classification[max_index]
         # max_index = np.where(result==max_prob)
         #
         # probabilities[max_index] = 0
@@ -351,18 +363,42 @@ class Classifier:
         # calculate calories
         # volume = self.processor.getVolume(
         #     result[0], farea, skinarea, pix_to_cm, fcont)
-        volume = self.processor.getVolume(
-            max_index, farea, skinarea, pix_to_cm, fcont)
-        # volume = 5000
-        # print(volume)
+        volume = None
+        for rank in dict:
+            food_index = dict[rank]
+            food = self.index2classification[food_index]
+            confidence = probabilities[food_index - 1]
+
+            print(confidence)
+            if volume is None:
+                volume = self.processor.getVolume(
+                    food_index, farea, skinarea, pix_to_cm, fcont)
+
+            volume = self.constraint_check(food, volume)
+            mass, cal, protein, carb, fat = self.processor.getMacros(food_index, volume)
+
+            dict_value = {
+                "food": food,
+                "mass": round(mass, 2),
+                "calorie": round(cal, 2),
+                "protein": round(protein, 2),
+                "carb": round(carb, 2),
+                "fat": round(fat, 2),
+                "confidence": round(confidence, 3)
+            }
+
+            dict[rank] = dict_value
+            print(dict)
 
         # classification = self.index2classification[int(result[0])]
-        classification = self.index2classification[max_index]
+        # classification = self.index2classification[max_index]
 
         # volume = 5000
-        volume = self.constraint_check(classification, volume)
-        mass, cal, protein, carb, fat = self.processor.getMacros(max_index, volume)
+
 
         # print(max_prob)
 
-        return classification, cal, protein, carb, fat, max_prob, food2probability
+        print(dict)
+
+        return dict
+        # return classification, cal, protein, carb, fat, max_prob, food2probability
