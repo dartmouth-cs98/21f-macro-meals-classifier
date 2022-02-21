@@ -24,12 +24,12 @@ def classify_img():
 		return json.dumps(msg)
 	else:
 		classifier = Classifier()
-		img_filepath = "train_images/Apple/1_20.jpg"
+		img_filepath = "train_images_broken/Pear/17_1.jpg"
 		# /*** # cv2 error for 2_50 ***/
-		try:
-			msg = classifier.classify(img_filepath)
-		except TypeError:
-			msg = "Classification failed"
+		# try:
+		msg = classifier.classify(img_filepath)
+		# except TypeError:
+			# msg = "Classification failed"
 		return json.dumps(msg)
 
 def download_url(img_url):

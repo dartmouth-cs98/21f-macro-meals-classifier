@@ -24,15 +24,13 @@ class Classifier:
         "qiwi",
         "sauce",
         "tomato",
-        "watermelon",
-        "cabbage",
-        "eggplant",
-        "pear",
-        "zucchini"
+        "watermelon"
     ]
 
-    # with train_images
+    #
     model_file = 'models/train_images_data.dat'
+    # with train_images
+    # model_file = 'models/train_images_data2.dat'
     # with train_images_broken
 
     # in cm^3
@@ -106,8 +104,10 @@ class Classifier:
         fruit_calories = []
         skin_areas = []
         fruit_calories_100grams = []
+        responses_including_ignore = 0
         for j in range(1, 15):
             for i in range(21, 26):
+                responses_including_ignore += 1
                 img_path = folder_path+str(j)+"_"+str(i)+".jpg"
                 print(img_path)
                 try:
@@ -130,7 +130,6 @@ class Classifier:
         #result = svm_model.predict_all(testData)
         final_result = []
         result = svm_model.predict_proba(testData)
-        print(result)
         for probability_list in result:
             max_prob = max(probability_list)
             max_index = np.where(probability_list==max_prob)[0] + 1
@@ -141,9 +140,14 @@ class Classifier:
         for i in range(len(responses)):
             if response[i][0] ==  final_result[i]:
                 right += 1
+            else:
+                print(self.index2classification[int(final_result[i])])
 
         print("accuracy rate:")
         print(right/len(responses))
+
+        print("accuracy rate including error catches: ")
+        print(right/responses_including_ignore)
 
     # for sanity check
     def constraint_check(self, classification, vol):
@@ -193,15 +197,15 @@ class Classifier:
             "three": top_3_indices[2] + 1
         }
 
-        volume = None
+        # volume = None
         for rank in rank2foodindex:
             food_index = rank2foodindex[rank]
             food = self.index2classification[food_index]
             confidence = probabilities[food_index - 1]
 
-            if volume is None:
-                volume = self.processor.getVolume(
-                    food_index, farea, skinarea, pix_to_cm, fcont)
+            # if volume is None:
+            volume = self.processor.getVolume(
+                food_index, farea, skinarea, pix_to_cm, fcont)
 
             volume = self.constraint_check(food, volume)
             mass, cal, protein, carb, fat = self.processor.getMacros(food_index, volume)
