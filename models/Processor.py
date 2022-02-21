@@ -101,28 +101,30 @@ class Processor:
 		contours, hierarchy = cv2.findContours(img_th, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
 		mask_skin = np.zeros(skin.shape, np.uint8)
 		largest_areas = sorted(contours, key=cv2.contourArea)
+		print(len(largest_areas))
 
+		# if can find finger
 		try:
 			# print(len(largest_areas))
 			cv2.drawContours(mask_skin, [largest_areas[-2]], 0, (255,255,255), -1)
+			skin_rect = cv2.minAreaRect(largest_areas[-2])
+			box = cv2.boxPoints(skin_rect)
+			box = np.int0(box)
+			mask_skin2 = np.zeros(skin.shape, np.uint8)
+			cv2.drawContours(mask_skin2,[box],0,(255,255,255), -1)
+
+			pix_height = max(skin_rect[1])
+			if pix_height == 0:
+				pix_to_cm_multiplier = 0
+			else:
+				pix_to_cm_multiplier = 5.0/pix_height
+			skin_area = cv2.contourArea(box)
 		except IndexError:
 			# exit()
-			print("debug: no contours found")
+			# print("debug: no contours found")
 			# return False
-
-		skin_rect = cv2.minAreaRect(largest_areas[-2])
-		box = cv2.boxPoints(skin_rect)
-		box = np.int0(box)
-		mask_skin2 = np.zeros(skin.shape, np.uint8)
-		cv2.drawContours(mask_skin2,[box],0,(255,255,255), -1)
-
-		pix_height = max(skin_rect[1])
-		if pix_height == 0:
-			pix_to_cm_multiplier = 0
-		else:
-			pix_to_cm_multiplier = 5.0/pix_height
-		skin_area = cv2.contourArea(box)
-
+			skin_area = None
+			pix_to_cm_multiplier = None
 
 		return fruit_area, mask_fruit2, fruit_final, skin_area, fruit_contour, pix_to_cm_multiplier
 
@@ -157,10 +159,16 @@ class Processor:
 		Using callibration techniques, the volume of the food item is calculated using the
 		area and contour of the foot item by comparing the foot item to standard geometric shapes
 		'''
-		area_fruit = (area/skin_area)*self.skin_multiplier #area in cm^2
+		# print("skin area")
+		# print(skin_area)
+		if skin_area is not None:
+			area_fruit = (area/skin_area)*self.skin_multiplier #area in cm^2
+		else:
+			area_fruit = area
+			pix_to_cm_multiplier = 1
 		label = int(label)
 		volume = 100
-		if label == 1 or label == 9 or label == 7 or label == 6 or label==12: #sphere-apple,tomato,orange,kiwi,onion
+		if label == 1 or label == 9 or label == 7 or label == 6 or label==12 or label==13: #sphere-apple,tomato,orange,kiwi,onion
 			radius = np.sqrt(area_fruit/np.pi)
 			volume = (4/3)*np.pi*radius*radius*radius
 			#print area_fruit, radius, volume, skin_area
@@ -171,11 +179,8 @@ class Processor:
 			radius = area_fruit/(2.0*height)
 			volume = np.pi*radius*radius*height
 
-		if (label==4 and area_fruit < 30) or (label==5) or (label==11): #cheese, carrot, sauce
+		if (label==4 and area_fruit < 30) or (label==5) or (label==11) or (label==3) or (label==14) or (label==8): #cheese, carrot, sauce
 			volume = area_fruit*0.5 #assuming width = 0.5 cm
-
-		if (label==8) or (label==14) or (label==3) or (label==13):
-			volume = None
 
 		return volume
 
