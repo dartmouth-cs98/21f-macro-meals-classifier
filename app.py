@@ -18,41 +18,17 @@ def classify_img():
 		img_filepath = download_url(s3_url)
 		try:
 			msg = classifier.classify(img_filepath)
-			# msg = "classification: " + classification + ", "
-			# msg += "calories: " + str(int(calories))
 			os.remove(img_filepath)
-			# msg = {
-			# 	"classification": classification,
-			# 	"calories": int(calories),
-			# 	"protein": int(protein),
-			# 	"carbs": int(carb),
-			# 	"fats": int(fat)
-			# }
 		except TypeError:
 			msg = "Classification failed"
 
 		return json.dumps(msg)
 	else:
 		classifier = Classifier()
-		# s3_url = "https://macro-meals-images.s3.amazonaws.com/2_5.jpg"
-		# s3_url = "https://macro-meals-images.s3.amazonaws.com/20211114T1932"
-		# img_filepath = download_url(s3_url)
-		img_filepath = "train_images/Cheese/5_3.jpg"
+		img_filepath = "train_images/Apple/1_20.jpg"
 		# /*** # cv2 error for 2_50 ***/
 		try:
 			msg = classifier.classify(img_filepath)
-			# msg = "classification: " + classification + ", "
-			# msg += "calories: " + str(int(calories))
-			# os.remove(img_filepath)
-			# msg = {
-			# 	"classification": classification,
-			# 	"calories": int(calories),
-			# 	"protein": int(protein),
-			# 	"carbs": int(carb),
-			# 	"fats": int(fat),
-			# 	"confidence": confidence_score,
-			# 	"top 3 foods": food2probability
-			# 	}
 		except TypeError:
 			msg = "Classification failed"
 		return json.dumps(msg)
