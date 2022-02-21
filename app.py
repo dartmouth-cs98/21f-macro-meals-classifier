@@ -19,22 +19,15 @@ def classify_img():
 		try:
 			msg = classifier.classify(img_filepath)
 			os.remove(img_filepath)
-
 		except TypeError:
 			msg = "Classification failed"
 		return json.dumps(msg)
 	else:
 		classifier = Classifier()
-		# s3_url = "https://macro-meals-images.s3.amazonaws.com/2_5.jpg"
-		# s3_url = "https://macro-meals-images.s3.amazonaws.com/20211114T1932"
-		# img_filepath = download_url(s3_url)
-		img_filepath = "train_images/Cheese/5_3.jpg"
+		img_filepath = "train_images/Apple/1_20.jpg"
 		# /*** # cv2 error for 2_50 ***/
 		try:
 			msg = classifier.classify(img_filepath)
-			# msg = "classification: " + classification + ", "
-			# msg += "calories: " + str(int(calories))
-			# os.remove(img_filepath)
 		except TypeError:
 			msg = "Classification failed"
 		return json.dumps(msg)
