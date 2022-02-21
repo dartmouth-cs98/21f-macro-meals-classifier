@@ -34,8 +34,6 @@ class Classifier:
     # with train_images
     model_file = 'models/train_images_data.dat'
     # with train_images_broken
-    # model_file = 'models/train_images_broken_data.dat'
-
 
     # in cm^3
     classification2ceiling_vol = {
