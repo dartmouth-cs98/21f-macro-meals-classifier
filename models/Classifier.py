@@ -9,30 +9,46 @@ import csv
 
 class Classifier:
 
+    # index2classification = [
+    #     "none",
+    #     "apple",
+    #     "banana",
+    #     "beans",
+    #     "carrot",
+    #     "cheese",
+    #     "cucumber",
+    #     "onion",
+    #     "orange",
+    #     "pasta",
+    #     "pepper",
+    #     "qiwi",
+    #     "sauce",
+    #     "tomato",
+    #     "watermelon"
+    # ]
+
+    # for train_images_unit
     index2classification = [
         "none",
         "apple",
         "banana",
-        "beans",
         "carrot",
         "cheese",
         "cucumber",
         "onion",
         "orange",
-        "pasta",
         "pepper",
         "qiwi",
-        "sauce",
         "tomato",
         "watermelon"
     ]
 
-    #
-    model_file = 'models/train_images_data.dat'
     # with train_images
-    # model_file = 'models/train_images_data2.dat'
+    # model_file = 'models/train_images_data.dat'
+    # model_file = 'models/train_images_unit_data.dat'
     # with train_images_broken
     # model_file = 'models/train_images_broken_data.dat'
+    model_file = 'models/train_images_unit_cleaned_data.dat'
 
 
     # in cm^3
@@ -66,7 +82,6 @@ class Classifier:
         for food_type in os.listdir(folder_path):
             try:
                 j = self.index2classification.index(food_type.lower())
-                print("j: " + str(j))
             except ValueError:
                 continue
             for file_name in os.listdir(folder_path + "/" + food_type):
@@ -78,6 +93,7 @@ class Classifier:
                     fea, farea, skinarea, fcont, pix_to_cm = self.processor.readFeatureImg(img_path)
                     feature_mat.append(fea)
                     response.append(float(j))
+                    print(j)
                 # sometimes contours not found; need to figure out how to deal if happens w user image
                 except IndexError:
                     print("Ignoring file^")
@@ -107,23 +123,25 @@ class Classifier:
         skin_areas = []
         fruit_calories_100grams = []
         responses_including_ignore = 0
-        for j in range(1, 15):
-            for i in range(21, 26):
-                responses_including_ignore += 1
-                img_path = folder_path+str(j)+"_"+str(i)+".jpg"
-                print(img_path)
-                try:
-                    fea, farea, skinarea, fcont, pix_to_cm = self.processor.readFeatureImg(
-                        img_path)
-                    pix_cm.append(pix_to_cm)
-                    fruit_contours.append(fcont)
-                    fruit_areas.append(farea)
-                    feature_mat.append(fea)
-                    skin_areas.append(skinarea)
-                    response.append([float(j)])
-                    image_names.append(img_path)
-                except IndexError:
-                    print("Ignoring file:")
+        for file_name in os.listdir(folder_path):
+            if file_name == "script.sh" or file_name == "script.sh~":
+                continue
+            responses_including_ignore += 1
+            img_path = folder_path + file_name
+            j = int(file_name.split("_")[0])
+            print(img_path)
+            try:
+                fea, farea, skinarea, fcont, pix_to_cm = self.processor.readFeatureImg(
+                    img_path)
+                pix_cm.append(pix_to_cm)
+                fruit_contours.append(fcont)
+                fruit_areas.append(farea)
+                feature_mat.append(fea)
+                skin_areas.append(skinarea)
+                response.append([float(j)])
+                image_names.append(img_path)
+            except IndexError:
+                print("Ignoring file:")
 
         testData = np.float32(feature_mat).reshape(-1, 94)
         responses = np.float32(response)

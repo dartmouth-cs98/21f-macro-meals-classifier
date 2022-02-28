@@ -101,9 +101,8 @@ class Processor:
 		contours, hierarchy = cv2.findContours(img_th, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
 		mask_skin = np.zeros(skin.shape, np.uint8)
 		largest_areas = sorted(contours, key=cv2.contourArea)
-		print(len(largest_areas))
 
-		# if can find finger
+		# if can't find finger
 		try:
 			# print(len(largest_areas))
 			cv2.drawContours(mask_skin, [largest_areas[-2]], 0, (255,255,255), -1)
