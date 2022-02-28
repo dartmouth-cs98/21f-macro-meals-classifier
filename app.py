@@ -21,7 +21,6 @@ def classify_img():
 			os.remove(img_filepath)
 		except TypeError:
 			msg = "Classification failed"
-
 		return json.dumps(msg)
 	else:
 		classifier = Classifier()
