@@ -33,7 +33,7 @@ class Classifier:
         "apple",
         "banana",
         "carrot",
-        "cheese",
+        # "cheese",
         "cucumber",
         "onion",
         "orange",
@@ -43,12 +43,25 @@ class Classifier:
         "watermelon"
     ]
 
-    # with train_images
+    # all images
     # model_file = 'models/train_images_data.dat'
-    # model_file = 'models/train_images_unit_data.dat'
-    # with train_images_broken
+
+    # added invalid training images
     # model_file = 'models/train_images_broken_data.dat'
-    model_file = 'models/train_images_unit_cleaned_data.dat'
+
+    # removed pasta, sauce, beans
+    # model_file = 'models/train_images_unit_data.dat'
+
+    # removed cheese
+    # make sure to use test_images2
+    model_file = 'models/train_images_unit2_data.dat'
+
+    # cut down on training images in each food for train_images_unit
+    # model_file = 'models/train_images_unit_cleaned_data.dat'
+
+    # cut down on training images in each food for train_images_unit2
+    # make sure to use test_images2
+    # model_file = 'models/train_images_unit_cleaned2_data.dat'
 
 
     # in cm^3
@@ -156,18 +169,36 @@ class Classifier:
             # print(max_index)
             final_result.append(max_index)
 
+        food2incorrect_count = {}
+        food2incorrect_classification = {}
+
         right = 0
         for i in range(len(responses)):
             if response[i][0] ==  final_result[i]:
                 right += 1
             else:
-                print(self.index2classification[int(final_result[i])])
+                actual_food = self.index2classification[int(final_result[i])]
+                print(response[i])
+                classification = self.index2classification[int(response[i][0])]
+                if not actual_food in food2incorrect_count:
+                    food2incorrect_count[actual_food] = 0
+                    food2incorrect_classification[actual_food] = []
+                food2incorrect_count[actual_food] += 1
+                food2incorrect_classification[actual_food].append(classification)
+
+
 
         print("accuracy rate:")
         print(right/len(responses))
 
         print("accuracy rate including error catches: ")
         print(right/responses_including_ignore)
+
+        print("incorrect classification counts by food type: ")
+        print(food2incorrect_count)
+
+        print("incorrect classifications compared to actual food (right and left)")
+        print(food2incorrect_classification)
 
     # for sanity check
     def constraint_check(self, classification, vol):
