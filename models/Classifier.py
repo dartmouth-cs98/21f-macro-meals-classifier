@@ -54,14 +54,14 @@ class Classifier:
 
     # removed cheese
     # make sure to use test_images2
-    # model_file = 'models/train_images_unit2_data.dat'
+    model_file = 'models/train_images_unit2_data.dat'
 
     # cut down on training images in each food for train_images_unit
     # model_file = 'models/train_images_unit_cleaned_data.dat'
 
     # cut down on training images in each food for train_images_unit2
     # make sure to use test_images2
-    model_file = 'models/train_images_unit_cleaned2_data.dat'
+    # model_file = 'models/train_images_unit_cleaned2_data.dat'
 
 
     # in cm^3
