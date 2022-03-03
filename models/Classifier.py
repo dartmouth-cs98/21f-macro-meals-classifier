@@ -40,7 +40,8 @@ class Classifier:
         "pepper",
         "qiwi",
         "tomato",
-        "watermelon"
+        "watermelon",
+        "pear"
     ]
 
     # all images
@@ -54,7 +55,10 @@ class Classifier:
 
     # removed cheese
     # make sure to use test_images2
-    model_file = 'models/train_images_unit2_data.dat'
+    # model_file = 'models/train_images_unit2_data.dat'
+
+    # with added self-taken photos, pears
+    model_file = 'models/train_images_unit3_data.dat'
 
     # cut down on training images in each food for train_images_unit
     # model_file = 'models/train_images_unit_cleaned_data.dat'
@@ -69,6 +73,7 @@ class Classifier:
         "apple": 250,
         "banana": 200,
         "beans": 2000,
+
         "carrot": 200,
         "cheese": 2000,
         "cucumber": 400,
