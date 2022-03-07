@@ -80,7 +80,7 @@ class Classifier:
         "onion": 800,
         "orange": 300,
         "pasta": 2000,
-        "pepper": 2000,
+        "pepper": 500,
         "qiwi": 250,
         "sauce": 2000,
         "tomato": 350,
