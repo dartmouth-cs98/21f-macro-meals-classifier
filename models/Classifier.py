@@ -84,7 +84,7 @@ class Classifier:
         "qiwi": 250,
         "sauce": 2000,
         "tomato": 350,
-        "watermelon": 2500,
+        "watermelon": 300,
         "cabbage": 1500,
         "eggplant": 600,
         "pear": 300,
