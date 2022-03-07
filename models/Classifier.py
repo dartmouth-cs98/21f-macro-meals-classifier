@@ -38,7 +38,7 @@ class Classifier:
         "onion",
         "orange",
         "pepper",
-        "qiwi",
+        "kiwi",
         "tomato",
         "watermelon",
         "pear"
@@ -81,7 +81,7 @@ class Classifier:
         "orange": 300,
         "pasta": 2000,
         "pepper": 500,
-        "qiwi": 200,
+        "kiwi": 200,
         "sauce": 2000,
         "tomato": 350,
         "watermelon": 300,
